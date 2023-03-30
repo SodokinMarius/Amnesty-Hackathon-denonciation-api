@@ -38,89 +38,54 @@ class TeamSerializer(serializers.ModelSerializer):
 
 
 class DenonciationSerializer(serializers.ModelSerializer):
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=False)
+    denonciator_id = serializers.PrimaryKeyRelatedField(source='denonciator', queryset=Denonciator.objects.all(), required=True)
+    actors = serializers.PrimaryKeyRelatedField(many=True, queryset=Actor.objects.all(), required=False)
+    pictures = serializers.ImageField(
+        required=False,
+        allow_empty_file=True,
+        use_url=False,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png','jpeg'])]
+    )
+    audio = serializers.FileField(
+        required=False,
+        allow_empty_file=True,
+        use_url=False,
+        validators=[FileExtensionValidator(allowed_extensions=['mp3', 'aac'])]
+    )
+    file = serializers.FileField(
+        required=False,
+        allow_empty_file=True,
+        use_url=False,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc','docx','txt'])]
+    )
+    status = serializers.SerializerMethodField()
 
-    audio = serializers.ImageField(
-    required=True,
-    allow_empty_file=False,
-    use_url=False,
-    validators=[FileExtensionValidator(allowed_extensions=['mp3', 'aav'])]
-        )
+
+    def get_status(self, obj):
+        return str(obj.status)
     
-    file = serializers.ImageField(
-    required=True,
-    allow_empty_file=False,
-    use_url=False,
-    validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc','docx','txt'])]
-)
     class Meta:
         model = Denonciation
         fields = '__all__'
-        read_only_fields = ['id','team','category','created_at','updated_at']
+        read_only_fields = ['id', 'category', 'team', 'status', 'updated_at']
         depth = 1
-     
-    def validate_pictures(self, value):
-        """ Valide les images en vérifiant leur extension """
-        valid_extensions = ['.jpg', '.jpeg', '.png']
-        for img in value:
-            ext = img.split('.')[-1]
-            if not ext.lower() in valid_extensions:
-                raise serializers.ValidationError(
-                    "Seules les images de type JPG, JPEG ou PNG sont acceptées."
-                )
-        return value
-    
-    def validate_audio(self, value):
-        """ Valide le fichier audio en vérifiant son extension """
-        if value:
-            ext = value.name.split('.')[-1]
-            if not ext.lower() in ['mp3','aav']:
-                raise serializers.ValidationError(
-                    "Seuls les fichiers audio de type MP3  ou aav sont acceptés."
-                )
-        return value
-    
-    def validate_file(self, value):
-        """ Valide le fichier en vérifiant son extension """
-        if value:
-            ext = value.name.split('.')[-1]
-            if not ext.lower() in ['.pdf', '.doc', '.docx']:
-                raise serializers.ValidationError(
-                    "Seuls les fichiers de type PDF, DOC ou DOCX,TXT sont acceptés."
-                )
-        return value
-    
+
     def create(self, validated_data):
-        """ Traitement des fichiers avant la création de la denonciation """
-        # Récupération des fichiers
         pictures = validated_data.pop('pictures', [])
         audio = validated_data.pop('audio', None)
         file = validated_data.pop('file', None)
-        
-        # Création de la denonciation
+        actors = validated_data.pop('actors', [])
+
         denonciation = Denonciation.objects.create(**validated_data)
+
+        denonciation.pictures = pictures
+        denonciation.audio = audio
+        denonciation.file = file
+
+        if actors:
+            denonciation.actors.set(actors)
         
-        # Traitement des images
-        for img in pictures:
-            # Traitement de chaque image, par exemple : 
-            resized_img = resize_image(img) #resize the image
-            save_to_disk(resized_img,'images/denonciation_pictures')#save image to disk
-            denonciation.pictures.append(resized_img)
-        
-        # Traitement du fichier audio
-        if audio:
-            # Traitement du fichier audio, par exemple :
-            trimmed_audio = trim_audio(audio)
-            save_audio_to_disk(trimmed_audio)
-            denonciation.audio = trimmed_audio
-        
-        # Traitement du fichier
-        if file:
-            # Traitement du fichier, par exemple :
-            converted_file = convert_to_pdf(file)
-            save_file_to_disk(converted_file)
-            denonciation.file = converted_file
-        
-        # Sauvegarde de la denonciation
         denonciation.save()
         return denonciation
     

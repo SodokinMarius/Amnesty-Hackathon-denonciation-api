@@ -54,6 +54,7 @@ THIRDS_MODULES = [
     'drf_yasg',
     'allauth',
     'allauth.account',
+    #'drf_spectacular'
 ]
 
 INSTALLED_APPS = APPS_MODULES + INITIAL_MODULES + THIRDS_MODULES
@@ -125,6 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 #Django Rest Framework strategy
 
 REST_FRAMEWORK = {
+    #'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -134,6 +136,16 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Spectacular settings
+"""
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Denunciation API',
+    'DESCRIPTION': 'Allegation Denunciation API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
+"""
 #for allauth
 AUTHENTICATION_BACKENDS = [
 
@@ -171,9 +183,22 @@ SWAGGER_SETTINGS = {
     }
 }
 
+"""#with drf_spectacular
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT token'
+        }
+    },
+    'SECURITY': [{'Bearer': []}]
+}"""
 
 
-"""DATABASES = {
+DATABASES = {
 	'default': {
 		'ENGINE': os.getenv('DB_ENGINE','django.db.backends.sqlite3'),
 		'NAME':  os.getenv('DB_NAME',os.path.join(BASE_DIR, "db.sqlite3")),  
@@ -182,14 +207,15 @@ SWAGGER_SETTINGS = {
 		'HOST': os.getenv('DB_HOST','localhost'),
 		'PORT': os.getenv('DB_PORT','5432')
 	}
-}"""
-
+}
+"""
 DATABASES = {
-	'default':   dj_database_url.parse(os.environ.get('DATABASE_URL'))
-
-		
+	'default':   dj_database_url.parse(os.environ.get('DATABASE_URL'))	
 	
 }
+
+"""
+
 
 #Djoser settings
 DJOSER = {
@@ -268,7 +294,7 @@ TEST  DATA
   "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgwMTkzNDI3LCJqdGkiOiJlNGU3OTA0MGNhNDk0MmYzYjBjMWJhMjFhNmQzOGM5OCIsInVzZXJfaWQiOiJzeWFvbWFyaXVzQGdtYWlsLmNvbSJ9.0y19h8eD9BkSXI_YCtI0-mvz-IbKaSJctZ6raEwP_OM"
 }
 
-{
+
   "address": {},
   "profil": "http://127.0.0.1:8000/admin_images/Usecase_hackathon_App_web_Competition_avfZN0h.png",
   "first_name": "Yao Marius",

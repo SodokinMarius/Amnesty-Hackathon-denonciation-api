@@ -11,6 +11,7 @@ from drf_yasg import openapi
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+#from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 #-----------------------------------------------------#
 #                   SWAGGER CONFIGURATION             #
@@ -27,6 +28,7 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=[permissions.AllowAny],
 )
+
 urlpatterns = [
 
         #-----------------------------------------------------#
@@ -36,6 +38,11 @@ urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('documentation/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+   # YOUR PATTERNS
+    #path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    #path('', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    #path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
         #-----------------------------------------------------#
         #                   AUTHENTICATION ROUTER             #

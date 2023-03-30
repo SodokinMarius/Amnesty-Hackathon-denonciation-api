@@ -22,7 +22,7 @@ from utils.random_password_generate import random_pass_generator
 
 class LogoutAPIView(generics.GenericAPIView):
     serializer_class = LogoutSerializer
-    permission_classes = (permissions.IsAuthenticated(),)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
 

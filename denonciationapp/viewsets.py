@@ -12,6 +12,14 @@ class DenonciationViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser,FormParser,FileUploadParser]
     permission_classes = [permissions.IsAuthenticated]
     
+
+    def perform_create(self, serializer):
+        denounced = serializer.save()
+        # Ajouter les acteurs à la relation many-to-many
+        actors = self.request.data.get('actors', [])
+        denounced.actors.set(actors)
+
+
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():

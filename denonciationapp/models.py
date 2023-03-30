@@ -63,10 +63,11 @@ class Team(models.Model):
 
 class Denonciation(models.Model):
     title = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
-    pictures = ArrayField(models.CharField(max_length=200)) # A revoir forcement même s'il faut créer une table à part pour les images
-    audio =  models.FileField(upload_to='audios/denonciation_audios',blank=True,null=True)
-    file =  models.FileField(upload_to='files/denonciation_files',blank=True,null=True)
+    description = models.TextField(verbose_name="Description de la denonciation")
+    #pictures = ArrayField(models.ImageField(upload_to='images/denonciations_images'))
+    pictures = models.ImageField(upload_to='denonciations_images')
+    audio =  models.FileField(upload_to='denonciation_audios',blank=True,null=True)
+    file =  models.FileField(upload_to='denonciation_files',blank=True,null=True)
     status = models.CharField(max_length=200,choices=StatutDenoEnum.items(),default=StatutDenoEnum.PENDING)
     address =  models.JSONField(verbose_name="Localisation") 
     priority = models.CharField(max_length=200,choices=PriorityDenoEnum.items(),default=PriorityDenoEnum.PASSED) 
