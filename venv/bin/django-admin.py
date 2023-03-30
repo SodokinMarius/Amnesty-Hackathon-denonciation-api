@@ -1,4 +1,4 @@
-#!/home/sodyam/Bureau/HACKATHON/denonciationapi/venv/bin/python
+#!/home/sodyam/Bureau/HACKATHON/Amnesty_api/venv/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 

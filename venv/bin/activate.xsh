@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"/home/sodyam/Bureau/HACKATHON/denonciationapi/venv"
+$VIRTUAL_ENV = r"/home/sodyam/Bureau/HACKATHON/Amnesty_api/venv"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

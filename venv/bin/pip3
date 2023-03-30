@@ -1,4 +1,4 @@
-#!/home/sodyam/Bureau/HACKATHON/denonciationapi/venv/bin/python
+#!/home/sodyam/Bureau/HACKATHON/Amnesty_api/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
