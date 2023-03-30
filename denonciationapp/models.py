@@ -6,21 +6,18 @@ from authentication.models import Administrator
 
 
 class Denonciator(models.Model):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    phone = models.CharField(max_length=15,unique=True)
+    phone = models.CharField(max_length=15,unique=True,null=False)
+    first_name = models.CharField(max_length=200,null=True,blank=True)
+    last_name = models.CharField(max_length=200,null=True,blank=True)
     address =  models.JSONField(verbose_name="Localisation")   
     created_at=models.DateTimeField(auto_now_add=True) 
     updated_at=models.DateTimeField(auto_now_add=True) 
 
-    REQUIRED_FIELDS=['first_name','last_name','address','phone']
+    REQUIRED_FIELDS=['address','phone']
  
     def __str__(self):
         return '{self.phone} {self.first_name} {self.last_name}'
-    
-    def has_perm(self, perm, obj=None):
-            return self.is_admin
-    
+   
     def get_user_name(self):
         return f'{self.first_name} {self.last_name}'
     
@@ -62,10 +59,10 @@ class Team(models.Model):
 
 
 class Denonciation(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(verbose_name="Description de la denonciation")
+    title = models.CharField(max_length=200,null=True,blank=True)
+    description = models.TextField(verbose_name="Description de la denonciation",null=True,blank=True)
     #pictures = ArrayField(models.ImageField(upload_to='images/denonciations_images'))
-    pictures = models.ImageField(upload_to='denonciations_images')
+    pictures = models.ImageField(upload_to='denonciations_images',null=True,blank=True)
     audio =  models.FileField(upload_to='denonciation_audios',blank=True,null=True)
     file =  models.FileField(upload_to='denonciation_files',blank=True,null=True)
     status = models.CharField(max_length=200,choices=StatutDenoEnum.items(),default=StatutDenoEnum.PENDING)
