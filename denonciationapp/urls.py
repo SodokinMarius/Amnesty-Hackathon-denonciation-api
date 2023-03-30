@@ -8,5 +8,28 @@ router = routers.DefaultRouter()
 
 router.register('denonciations',DenonciationViewSet)
 
+router.register('categories',CategoryViewSet)
+
+router.register('denonciators',DenonciatorViewSet)
+
+router.register('teams',TeamViewSet)
+
+router.register('steps',StepViewSet)
+
+router.register('actors',ActorViewSet)
+
+router.register('publications',PublicationViewSet)
+
+router.register('petitions',PetitionViewSet)
+
+
+
+
+
+
+
+
+
+
 
 urlpatterns = router.urls

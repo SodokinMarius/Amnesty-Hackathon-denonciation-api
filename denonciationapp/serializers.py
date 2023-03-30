@@ -171,7 +171,14 @@ class PetitionSerializer(serializers.ModelSerializer):
         fields = ['id', 'content', 'publication', 'user', 'created_at', 'updated_at']
         read_only_fields = ['id','created_at','updated_at','user']
         depth = 1
+    
 
+class DenonciatorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Denonciator
+        fields = ['id', 'first_name', 'last_name', 'phone', 'address', 'created_at', 'updated_at']
+        read_only_fields = ['id','created_at','updated_at','user']
+        depth = 1
 
 
 

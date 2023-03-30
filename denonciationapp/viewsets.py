@@ -66,3 +66,11 @@ class PublicationViewSet(viewsets.ModelViewSet):
 class PetitionViewSet(viewsets.ModelViewSet):
     queryset = Petition.objects.all()
     serializer_class = PetitionSerializer
+
+
+class DenonciatorViewSet(viewsets.ModelViewSet):
+    queryset = Denonciator.objects.all()
+    serializer_class = DenonciatorSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+

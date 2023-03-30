@@ -10,6 +10,7 @@ class Denonciator(models.Model):
     last_name = models.CharField(max_length=200)
     phone = models.CharField(max_length=15,unique=True)
     address =  models.JSONField(verbose_name="Localisation")   
+    created_at=models.DateTimeField(auto_now_add=True) 
     updated_at=models.DateTimeField(auto_now_add=True) 
 
     REQUIRED_FIELDS=['first_name','last_name','address','phone']
