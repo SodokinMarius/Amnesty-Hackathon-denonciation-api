@@ -11,6 +11,7 @@ from drf_yasg import openapi
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+
 #-----------------------------------------------------#
 #                   SWAGGER CONFIGURATION             #
 #-----------------------------------------------------#
@@ -45,7 +46,7 @@ urlpatterns = [
         #-----------------------------------------------------#
         #                   COMMISSION  ROUTER                #
         #-----------------------------------------------------#
-        #path('comm/', include('comissionApp.urls')),
+        path('deno/', include('denonciationapp.urls')),
 
         path('admin/', admin.site.urls),
 ]

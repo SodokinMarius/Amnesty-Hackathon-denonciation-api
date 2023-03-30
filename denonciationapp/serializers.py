@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from .models import *
-from authentication.models import User
 from django.core.validators import FileExtensionValidator
 
 from utils.utils import (
