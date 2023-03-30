@@ -32,7 +32,6 @@ class Denonciator(models.Model):
     
 
 class Category(models.Model):
-    code = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     description = models.TextField(verbose_name="Catégorie de la denonciation")
 
@@ -44,13 +43,13 @@ class Actor(models.Model):
     type = models.CharField(max_length=200,choices=VictimTypeEnum.items(),default=VictimTypeEnum.INDIVIDU) 
     name = models.TextField(verbose_name="Description de l'acteur")
     category = models.CharField(max_length=200,choices=ActorCategoryEnum.items(),default=ActorCategoryEnum.WITNESS) 
-    whatsapp = models.TextField(verbose_name="Numéro whatsapp de l'Equipe")
     address =  models.JSONField(verbose_name="Localisation")
 
+    def __str__(self) -> str:
+            return  self.name
     
 
 class Team(models.Model):
-    code = models.CharField(max_length=200)
     name = models.TextField(verbose_name="Description de l'Equipe")
     contact = models.TextField(verbose_name="contact de l'Equipe")
     whatsapp = models.TextField(verbose_name="Numéro whatsapp de l'Equipe")

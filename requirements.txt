@@ -16,3 +16,5 @@ drf-yasg==1.21.4
 Pillow==9.3
 pandas==1.5.3
 openpyxl==3.1.1
+
+docx2pdf==0.1.8
