@@ -82,10 +82,8 @@ class Denonciation(models.Model):
         return  self.title
     
 class Step(models.Model):
-    status = models.CharField(max_length=200,choices=EtapeStatutEnum.items(),default=EtapeStatutEnum.PENDING) 
     description = models.CharField(max_length=200)
     denonciation = models.ForeignKey(to=Denonciation,on_delete=models.SET_NULL,null=True) 
-    actors = models.ManyToManyField(to=Actor,related_name="step_actors")
     created_at=models.DateTimeField(auto_now_add=True)  
     updated_at=models.DateTimeField(auto_now_add=True) 
 

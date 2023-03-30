@@ -118,8 +118,8 @@ class DenonciationSerializer(serializers.ModelSerializer):
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
         model = Step
-        fields = ['id', 'status', 'description', 'denonciation', 'actors', 'created_at', 'updated_at']
-        read_only_fields = ['id','status','created_at','updated_at']
+        fields = ['id', 'description', 'denonciation', 'created_at', 'updated_at']
+        read_only_fields = ['id','created_at','updated_at']
         depth = 1
 
 
