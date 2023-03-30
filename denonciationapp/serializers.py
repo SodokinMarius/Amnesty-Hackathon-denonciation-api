@@ -12,7 +12,7 @@ convert_to_pdf,
 save_file_to_disk
 )
 from rest_framework import serializers
-from .models import Step, Publication, Petition
+from .models import *
 
 class CategorySerializer(serializers.ModelSerializer):
        class Meta:
@@ -23,7 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ActorSerializer(serializers.ModelSerializer):
        class Meta:
-            model = Category
+            model = Actor
             fields = ['id','type','name', 'category','address']
             read_only_fields = ['id']
             depth = 1
@@ -31,7 +31,7 @@ class ActorSerializer(serializers.ModelSerializer):
 
 class TeamSerializer(serializers.ModelSerializer):
        class Meta:
-            model = Category
+            model = Team
             fields = ['id','name','contact', 'whatsapp','address','responsable']
             read_only_fields = ['id']
             depth = 1
