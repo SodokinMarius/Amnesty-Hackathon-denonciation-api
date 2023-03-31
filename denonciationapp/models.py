@@ -7,11 +7,13 @@ from authentication.models import (
     Team
 )
 
+from authentication.models import Team
+
 
 class Denonciator(models.Model):
     phone = models.CharField(max_length=15,unique=True,null=False)
     first_name = models.CharField(max_length=200,null=True,blank=True)
-    #follow_code =  models.CharField(max_length=15,unique=True,null=True)
+    follow_code =  models.CharField(max_length=15,null=True)
     last_name = models.CharField(max_length=200,null=True,blank=True)
     address =  models.JSONField(verbose_name="Localisation")   
     created_at=models.DateTimeField(auto_now_add=True) 
@@ -50,7 +52,6 @@ class Actor(models.Model):
     def __str__(self) -> str:
             return  self.name
     
-
  
 class Denonciation(models.Model):
     title = models.CharField(max_length=200,null=True,blank=True)

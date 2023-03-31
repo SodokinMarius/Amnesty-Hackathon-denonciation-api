@@ -10,6 +10,9 @@ from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework import permissions, status, viewsets
 from utils.enums import *
 
+from django.db.models import Count
+from decimal import Decimal
+
 from utils.send_email import send_email_to
 
 
@@ -31,7 +34,7 @@ class DenonciationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             denonciator =  serializer.validated_data['denonciator']
-            denonciator = Denonciator.objects.get(id=denonciator.id)
+            denonciator = Denonciator.objects.get(id=denonciator.id) # A changer en utilisant le phone
 
             print("Le denonciateur===================>",denonciator)
 
@@ -177,14 +180,14 @@ class DenonciationViewSet(viewsets.ModelViewSet):
         return Response(data=response_data, status=status.HTTP_200_OK)
     
     
-    @action(methods=['get'], detail=False, url_path="", url_name="pending")
+    @action(methods=['get'], detail=False, url_path="pending", url_name="pending")
     def pending(self, request):
         
         response_data = self.getAllDenonciationCategorizedByStatus(StatutDenoEnum.PENDING.value)
         
         return Response(data=response_data, status=status.HTTP_200_OK)
         
-    @action(methods=['get'], detail=False, url_path="", url_name="in_progress")
+    @action(methods=['get'], detail=False, url_path="in_progress", url_name="in_progress")
     def in_progress(self, request):
         
         response_data = self.getAllDenonciationCategorizedByStatus(StatutDenoEnum.IN_PROGESS.value)
@@ -192,7 +195,7 @@ class DenonciationViewSet(viewsets.ModelViewSet):
         return Response(data=response_data, status=status.HTTP_200_OK)
     
         
-    @action(methods=['get'], detail=False, url_path="", url_name="rejected")
+    @action(methods=['get'], detail=False, url_path="rejected", url_name="rejected")
     def rejected(self, request):
         
         response_data = self.getAllDenonciationCategorizedByStatus(StatutDenoEnum.REJECTED.value)
@@ -200,21 +203,41 @@ class DenonciationViewSet(viewsets.ModelViewSet):
         return Response(data=response_data, status=status.HTTP_200_OK)
  
  
-    @action(methods=['get'], detail=False, url_path="", url_name="urgent")
+    @action(methods=['get'], detail=False, url_path="urgent", url_name="urgent")
     def urgent(self, request):
         
         response_data = self.getAllDenonciationCategorizedByPriority(PriorityDenoEnum.IN_PROGESS.value)
         
         return Response(data=response_data, status=status.HTTP_200_OK)
 
-    @action(methods=['get'], detail=False, url_path="", url_name="passed")
+    @action(methods=['get'], detail=False, url_path="passed", url_name="passed")
     def passed(self, request):
         
         response_data = self.getAllDenonciationCategorizedByPriority(PriorityDenoEnum.PASSED.value)
         
         return Response(data=response_data, status=status.HTTP_200_OK)
         
-             
+
+    @action(methods=['get'], detail=False, url_path="stats", url_name="stats")
+    def stats(self, request):
+        # Pour chaque statut, compter le nombre de dénonciations et calculer le pourcentage
+        denonciations = Denonciation.objects.values('status')\
+                  .annotate(num_denonciations=Count('id'))\
+                  .annotate(percentage=100 * Count('id') / Decimal(Denonciation.objects.count()))
+        
+        # Stat resulsts dict
+        stats_results = {}
+        for denonciation in denonciations:
+            val = {
+            "total" : denonciation['num_denonciations'],
+            "percentage" : denonciation['percentage']
+            }  
+            stats_results[denonciation['status']]   = val     
+            
+           
+        return Response(data=stats_results, status=status.HTTP_200_OK)
+            
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

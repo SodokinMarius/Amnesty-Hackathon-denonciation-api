@@ -13,7 +13,6 @@ class Team(models.Model):
     def __str__(self) -> str:
         return  self.name
     
-
 class UserManager(BaseUserManager):
     def create_user(self, email="admin@gmail.com", password=None,**kwargs):
         if not email:
