@@ -8,3 +8,5 @@ def send_email_to(subject:str,message:str,recipients:list,):
             recipient_list=recipients,
             fail_silently=False,
                 )
+    
+    #from_email = formataddr(('Nom de l\'application', 'yaomariussodokin@gmail.com'))
