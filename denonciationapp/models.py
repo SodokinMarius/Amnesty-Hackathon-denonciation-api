@@ -1,13 +1,17 @@
 from django.db import models
 from utils.enums import *
-
+import uuid
 from django.contrib.postgres.fields import ArrayField
-from authentication.models import Administrator
+from authentication.models import (
+    Administrator,
+    Team
+)
 
 
 class Denonciator(models.Model):
     phone = models.CharField(max_length=15,unique=True,null=False)
     first_name = models.CharField(max_length=200,null=True,blank=True)
+    #follow_code =  models.CharField(max_length=15,unique=True,null=True)
     last_name = models.CharField(max_length=200,null=True,blank=True)
     address =  models.JSONField(verbose_name="Localisation")   
     created_at=models.DateTimeField(auto_now_add=True) 
@@ -47,17 +51,7 @@ class Actor(models.Model):
             return  self.name
     
 
-class Team(models.Model):
-    name = models.TextField(verbose_name="Description de l'Equipe")
-    contact = models.TextField(verbose_name="contact de l'Equipe")
-    whatsapp = models.TextField(verbose_name="Numéro whatsapp de l'Equipe")
-    address =  models.JSONField(verbose_name="Localisation")
-    responsable = models.OneToOneField(to=Administrator,on_delete=models.SET_NULL,null=True)
-
-    def __str__(self) -> str:
-        return  self.name 
-
-
+ 
 class Denonciation(models.Model):
     title = models.CharField(max_length=200,null=True,blank=True)
     description = models.TextField(verbose_name="Description de la denonciation",null=True,blank=True)
@@ -107,6 +101,25 @@ class Petition(models.Model):
 
     def __str__(self) -> str:
             return  f'{self.content} {self.publication} {self.user}'
+    
+class Notification(models.Model):
+    content = models.TextField(verbose_name="contenu de la denonciation")
+    team = models.ForeignKey(to=Team,on_delete=models.SET_NULL,null=True) 
+    created_at=models.DateTimeField(auto_now_add=True)  
+    updated_at=models.DateTimeField(auto_now_add=True) 
+    
+    def __str__(self) -> str:        
+        return  f'{self.id}-{self.team.name}'
+
+
+class Sms(models.Model):
+    content = models.TextField(verbose_name="contenu du SMS")
+    denonciator = models.ForeignKey(to=Denonciator,on_delete=models.SET_NULL,null=True) 
+    created_at=models.DateTimeField(auto_now_add=True)  
+    updated_at=models.DateTimeField(auto_now_add=True) 
+    
+    def __str__(self) -> str:        
+        return  f'{self.id}-{self.denonciator.phone}'
 
 
 

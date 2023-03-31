@@ -35,6 +35,11 @@ class PriorityDenoEnum(BaseEnum):
     PASSED = "DEJA PASSEE"
    
 
+class NotificationTypeEnum(BaseEnum): 
+    EMAIL = "EMAIL"
+    SMS = "SMS"
+   
+
 class TypeAdminEnum(BaseEnum): 
     SUPERADMIN = "SUPERADMIN"
     TEAMADMIN = "TEAMADMIN"

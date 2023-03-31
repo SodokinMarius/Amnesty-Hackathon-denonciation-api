@@ -2,12 +2,17 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
+from authentication.models import Team
 from datetime import timezone
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework import permissions, status, viewsets
 from utils.enums import *
+
+from utils.send_email import send_email_to
+
+
 class DenonciationViewSet(viewsets.ModelViewSet):
     queryset = Denonciation.objects.all()
     serializer_class = DenonciationSerializer
@@ -25,7 +30,35 @@ class DenonciationViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
+            denonciator =  serializer.validated_data['denonciator']
+            print("Le denonciateur===================>",denonciator)
+            priority = serializer.validated_data['priority']
             serializer.save()
+            
+            notif_content = f"Un nouveau {priority} cas denoncé venant de {Denonciator(denonciator).phone} \n"
+            # save the nofication
+            default_team_number = 1 # parcequ'il n'a pas encore d'assignement, we consider the first team
+            team_concerned = Team.objects.get(id=default_team_number)
+            Notification.objects.create(
+        content = notif_content,
+            team = team_concerned
+            )
+            # send the same notif by mail to admin == all admin in team 1
+            notif_recipients = Administrator.objects.filter(team__id=default_team_number)
+            recipient_concerned = []
+            [recipient_concerned.append(recipient) for recipient in notif_recipients]
+
+            print('Les concernés de ce nouveau cas dénoncé =========>',notif_recipients)
+                
+            #Let send the mail
+            subject = "UN NOUVEAU CAS DENONCE"
+
+            send_email_to(
+                subject=subject,
+                message= notif_content,
+                recipients=["syaomarius@gmail.com",]
+            )
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -174,7 +207,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         categories = [
                 {
                     'category': CategorySerializer(category).data,
-                    'denonciations': DenonciationSerializer(DenonciationSerializer.objects.filter(category=category.id),many=True).data
+                    'denonciations': DenonciationSerializer(Denonciation.objects.filter(category=category.id),many=True).data
                 }
                 for category in categories
             ]
@@ -193,7 +226,6 @@ class TeamViewSet(viewsets.ModelViewSet):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
     permission_classes = [permissions.IsAuthenticated]
-
 
 
 class StepViewSet(viewsets.ModelViewSet):
@@ -223,4 +255,18 @@ class DenonciatorViewSet(viewsets.ModelViewSet):
     serializer_class = DenonciatorSerializer
     permission_classes = [permissions.AllowAny]
 
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    '''...A revoir la suite...'''
+
+class SmsViewSet(viewsets.ModelViewSet):
+    queryset = Sms.objects.all()
+    serializer_class = SmsSerializer
+    permission_classes = [permissions.AllowAny]
+
+    '''...A revoir la suite...'''
 

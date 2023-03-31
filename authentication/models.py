@@ -2,6 +2,18 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,BaseUserManager,PermissionsMixin)
 
+
+class Team(models.Model):
+    name = models.CharField(max_length=225,unique=True, default="PINCIPAL")
+    description = models.TextField(verbose_name="Description de l'Equipe",null=True)
+    contact = models.TextField(verbose_name="contact de l'Equipe")
+    whatsapp = models.TextField(verbose_name="Numéro whatsapp de l'Equipe")
+    address =  models.JSONField(verbose_name="Localisation")
+
+    def __str__(self) -> str:
+        return  self.name
+    
+
 class UserManager(BaseUserManager):
     def create_user(self, email="admin@gmail.com", password=None,**kwargs):
         if not email:
@@ -42,6 +54,8 @@ class Administrator(AbstractBaseUser,PermissionsMixin):
     last_name = models.CharField(max_length=200)
     phone = models.CharField(max_length=15)
     address =  models.JSONField(verbose_name="Localisation")
+    team = models.ForeignKey(to=Team,on_delete=models.SET_NULL,null=True)
+    is_team_responsable = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified=models.BooleanField(default=False)   
@@ -81,3 +95,4 @@ class UserActivationCode(models.Model):
 
     def __str__(self) -> str:
         return self.user.email + " : " + self.activation_code
+

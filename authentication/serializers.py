@@ -20,7 +20,7 @@ class AdminCreateSerializer(DjoserUserSerializer):
     )
     class Meta(DjoserUserSerializer.Meta):
         model = Administrator
-        fields = ['email','first_name','last_name','address','phone', 'image','password']  
+        fields = ['email','first_name','last_name','address','phone', 'image','password', 'team','is_team_responsable']  
         extra_kwargs = {'password': {'write_only': True}}
         depth = 1
         

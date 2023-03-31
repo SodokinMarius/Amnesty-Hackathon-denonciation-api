@@ -20,7 +20,9 @@ router.register('actors',ActorViewSet)
 
 router.register('publications',PublicationViewSet)
 
-router.register('petitions',PetitionViewSet)
+router.register('notifications',NotificationViewSet)
+
+router.register('sms',SmsViewSet)
 
 
 

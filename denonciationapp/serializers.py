@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
+from authentication.models import Team
 from django.core.validators import FileExtensionValidator
 
 from utils.utils import (
@@ -32,7 +33,7 @@ class ActorSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
        class Meta:
             model = Team
-            fields = ['id','name','contact', 'whatsapp','address','responsable']
+            fields = ['id','name','description','contact', 'whatsapp','address']
             read_only_fields = ['id']
             depth = 1
 
@@ -144,6 +145,22 @@ class DenonciatorSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'phone', 'address', 'created_at', 'updated_at']
         read_only_fields = ['id','created_at','updated_at','user']
         depth = 1
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ['id', 'content', 'team','created_at', 'updated_at']
+        read_only_fields = ['id','created_at','updated_at','team']
+        depth = 1
+
+class SmsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sms
+        fields = ['id', 'content', 'denonciator','created_at', 'updated_at']
+        read_only_fields = ['id','created_at','updated_at','denonciator']
+        depth = 1
+
 
 
 
