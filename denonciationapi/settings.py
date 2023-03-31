@@ -198,7 +198,7 @@ SWAGGER_SETTINGS = {
 }"""
 
 
-DATABASES = {
+"""DATABASES = {
 	'default': {
 		'ENGINE': os.getenv('DB_ENGINE','django.db.backends.sqlite3'),
 		'NAME':  os.getenv('DB_NAME',os.path.join(BASE_DIR, "db.sqlite3")),  
@@ -207,13 +207,13 @@ DATABASES = {
 		'HOST': os.getenv('DB_HOST','localhost'),
 		'PORT': os.getenv('DB_PORT','5432')
 	}
-}
+}"""
 
 
-"""DATABASES = {
+DATABASES = {
 	'default':   dj_database_url.parse(os.environ.get('DATABASE_URL'))	
 	
-}"""
+}
 
 
 #Djoser settings
