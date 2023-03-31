@@ -36,7 +36,7 @@ class DenonciationViewSet(viewsets.ModelViewSet):
             try :
                 priority = serializer.validated_data['priority']
             except KeyError:
-                priority = PriorityDenoEnum.PASSED
+                priority = PriorityDenoEnum.IN_PROGESS.value
             serializer.save()
             
             notif_content = f"Un nouveau {priority} cas denoncé venant de {Denonciator(denonciator).phone} \n"
