@@ -1,0 +1,43 @@
+
+Les taches que j'ai accomplies dans la semaine :
+- Les tâches qui sont ajoutées au Trello 
+- Preparation du fichier des nouvelles cryptomonnaies 
+- chargement du fichier jspon des nouvelles crypto et execution du script 
+	pour créer les :
+	* business fees
+	* les plateformes money 
+	* les devises 
+	* sub type systeme
+	* plateformes money interdits
+
+- Changement de l'architecture du système de sorte que 
+	* mise à  jour regulier du fichier s3 en ligne 
+	(fichier qui contiient les toutes les plateformes money)
+	à partir de la base de données ===> 
+	j'ai appris à interagir avec le fichier S3 
+	(gestionnaire de fichier de AWS) 
+	
+	
+- Reste à faire ===appel de cette fonction update à chaque requete POST d'une nouvelle plateform maoney
+	
+	
+	=====++>* Recupération du contenu actuelle de la S3
+	(afin  de pouvoir l'utiliser pour des opération backend) sans chaque fois envoyer des requetes vers la BD) 
+	*  Ceci est fait chaque avc des fonctions dont les retours sont stocker dans des variables locales qui sont expolitées dans nos opérations
+	
+	=======++> NOuvelle Notion = Update le contenu de S3
+	
+	
+- Interroger l'API de binance avec POStman afin de touver toutes les cryptomonnaies disponibles 
+*Je souhaietaris comprendre toutes les opérations que vous avez fait en utilisant binance (convertion, paiement, stockage, wallet, etc.....)
+
+	
+- Lecture et compréhension de certaines parties diu code ==> kpis_routes, plateform_money_routes
+
+
+
+======+> Je souhaiterais Deploiement sur AWS
+
+Perspective -------> JE vais comprendre avec le temps le reste du code 
+
+Remarque : J'ai vraiment aimé la manière dont les choses evoluent 

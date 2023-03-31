@@ -31,7 +31,10 @@ class DenonciationViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             denonciator =  serializer.validated_data['denonciator']
+            denonciator = Denonciator.objects.get(id=denonciator.id)
+
             print("Le denonciateur===================>",denonciator)
+
             priority = ""
             try :
                 priority = serializer.validated_data['priority']
@@ -39,29 +42,43 @@ class DenonciationViewSet(viewsets.ModelViewSet):
                 priority = PriorityDenoEnum.IN_PROGESS.value
             serializer.save()
             
-            notif_content = f"Un nouveau {priority} cas denoncé venant de {Denonciator(denonciator).phone} \n"
+            notif_content = f"Un nouveau {priority} cas denoncé venant de {denonciator.phone} \n"
             # save the nofication
-            default_team_number = 1 # parcequ'il n'a pas encore d'assignement, we consider the first team
-            team_concerned = Team.objects.get(id=default_team_number)
-            Notification.objects.create(
-        content = notif_content,
-            team = team_concerned
-            )
-            # send the same notif by mail to admin == all admin in team 1
-            notif_recipients = Administrator.objects.filter(team__id=default_team_number)
-            recipient_concerned = []
-            [recipient_concerned.append(recipient) for recipient in notif_recipients]
+            """if Team.objects.count() >0 :
 
-            print('Les concernés de ce nouveau cas dénoncé =========>',notif_recipients)
+                default_team_number = 1 # parcequ'il n'a pas encore d'assignement, we consider the first team
+                team_concerned = Team.objects.get(id=default_team_number)
+                Notification.objects.create(
+                content = notif_content,
+                team = team_concerned
+                )
+                notif_recipients = Administrator.objects.filter(team__id=default_team_number)
+
+            else : 
+                Notification.objects.create(
+                content = notif_content               
+                )"""
                 
-            #Let send the mail
-            subject = "UN NOUVEAU CAS DENONCE"
+            # send the same notif by mail to admin == all admin in team 1
+            if  Administrator.objects.count() > 0:
+                notif_recipients =  Administrator.objects.all()
+                recipient_concerned_mail = []
+                [recipient_concerned_mail.append(recipient.email) for recipient in notif_recipients]
 
-            send_email_to(
-                subject=subject,
-                message= notif_content,
-                recipients=["syaomarius@gmail.com",]
-            )
+                print('Les concernés de ce nouveau cas dénoncé =========>',notif_recipients)
+                        
+                #Let send the mail
+                subject = "UN NOUVEAU CAS DENONCE"
+
+
+                send_email_to(
+                    subject=subject,
+                    message= notif_content,
+                    recipients=recipient_concerned_mail
+                )
+            Notification.objects.create(
+                content = notif_content               
+                )
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
