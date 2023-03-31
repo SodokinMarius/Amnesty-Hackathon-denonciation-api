@@ -38,9 +38,9 @@ class Category(models.Model):
 
 
 class Actor(models.Model):
-    type = models.CharField(max_length=200,choices=VictimTypeEnum.items(),default=VictimTypeEnum.INDIVIDU) 
+    type = models.CharField(max_length=200,choices=VictimTypeEnum.items(),default=VictimTypeEnum.INDIVIDU.value) 
     name = models.TextField(verbose_name="Description de l'acteur")
-    category = models.CharField(max_length=200,choices=ActorCategoryEnum.items(),default=ActorCategoryEnum.WITNESS) 
+    category = models.CharField(max_length=200,choices=ActorCategoryEnum.items(),default=ActorCategoryEnum.WITNESS.value) 
     address =  models.JSONField(verbose_name="Localisation")
 
     def __str__(self) -> str:
@@ -65,9 +65,9 @@ class Denonciation(models.Model):
     pictures = models.ImageField(upload_to='denonciations_images',null=True,blank=True)
     audio =  models.FileField(upload_to='denonciation_audios',blank=True,null=True)
     file =  models.FileField(upload_to='denonciation_files',blank=True,null=True)
-    status = models.CharField(max_length=200,choices=StatutDenoEnum.items(),default=StatutDenoEnum.PENDING)
+    status = models.CharField(max_length=200,choices=StatutDenoEnum.items(),default=StatutDenoEnum.PENDING.value)
     address =  models.JSONField(verbose_name="Localisation") 
-    priority = models.CharField(max_length=200,choices=PriorityDenoEnum.items(),default=PriorityDenoEnum.PASSED) 
+    priority = models.CharField(max_length=200,choices=PriorityDenoEnum.items(),default=PriorityDenoEnum.PASSED.value) 
     denonciator = models.ForeignKey(to=Denonciator,on_delete=models.SET_NULL,null=True) 
     category = models.ForeignKey(to=Category,on_delete=models.SET_NULL,null=True) 
     team = models.ForeignKey(to=Team,on_delete=models.SET_NULL,null=True) 
@@ -88,7 +88,7 @@ class Step(models.Model):
         return  f'{self.status} {self.denonciation}'
 
 class Publication(models.Model):  
-    type = models.CharField(max_length=200,choices=TypePublishEnumEnum.items(),default=TypePublishEnumEnum.ACTUALITE) 
+    type = models.CharField(max_length=200,choices=TypePublishEnumEnum.items(),default=TypePublishEnumEnum.ACTUALITE.value) 
     content = models.TextField(verbose_name="Description de la publication")
     administrator = models.ForeignKey(to=Administrator,on_delete=models.SET_NULL,null=True)
     created_at=models.DateTimeField(auto_now_add=True)  

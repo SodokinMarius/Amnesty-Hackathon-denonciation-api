@@ -51,7 +51,7 @@ class DenonciationSerializer(serializers.ModelSerializer):
         required=False,
         allow_empty_file=True,
         use_url=False,
-        validators=[FileExtensionValidator(allowed_extensions=['mp3', 'aac'])]
+        validators=[FileExtensionValidator(allowed_extensions=['mp3', 'aac','wav'])]
     )
     file = serializers.FileField(
         required=False,
