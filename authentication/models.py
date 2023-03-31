@@ -71,7 +71,7 @@ class Administrator(AbstractBaseUser,PermissionsMixin):
 
 
     def __str__(self) -> str:
-        return self.email + " : " + self.activation_code
+        return self.email + " : " + self.first_name
 
     def has_perm(self, perm, obj=None):
             return self.is_admin
